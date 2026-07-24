@@ -1,0 +1,13 @@
+{
+  "name": "nombre-repo",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:api": "pnpm --filter api run start:dev",
+    "dev:web": "pnpm --filter web run dev",
+    "test:api": "pnpm --filter api run test",
+    "test:web": "pnpm --filter web run test",
+    "build:api": "pnpm --filter api run build",
+    "build:web": "pnpm --filter web run build"
+  }
+}
