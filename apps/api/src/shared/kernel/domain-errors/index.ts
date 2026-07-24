@@ -41,3 +41,9 @@ export class InvalidCardDataError extends DomainError {
     super('INVALID_CARD_DATA', message);
   }
 }
+
+export class InvalidCustomerDataError extends DomainError {
+  constructor(message = 'Invalid customer data provided') {
+    super('INVALID_CUSTOMER_DATA', message);
+  }
+}

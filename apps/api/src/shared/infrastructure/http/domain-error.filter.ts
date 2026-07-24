@@ -8,6 +8,7 @@ import {
   TransactionNotFoundError,
   InsufficientStockError,
   InvalidCardDataError,
+  InvalidCustomerDataError,
   PaymentGatewayError,
 } from '../../kernel/domain-errors';
 
@@ -28,7 +29,8 @@ export class DomainErrorFilter implements ExceptionFilter {
       status = HttpStatus.NOT_FOUND;
     } else if (
       exception instanceof InsufficientStockError ||
-      exception instanceof InvalidCardDataError
+      exception instanceof InvalidCardDataError ||
+      exception instanceof InvalidCustomerDataError
     ) {
       status = HttpStatus.BAD_REQUEST;
     } else if (exception instanceof PaymentGatewayError) {
