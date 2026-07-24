@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { DomainErrorFilter } from './shared/infrastructure/http/domain-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Global Exception Filter for DomainError
+  app.useGlobalFilters(new DomainErrorFilter());
 
   // 4. Swagger
   const swaggerConfig = new DocumentBuilder()
