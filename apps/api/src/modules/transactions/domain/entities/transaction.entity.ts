@@ -3,6 +3,7 @@ export type TransactionStatus = 'PENDING' | 'APPROVED' | 'DECLINED' | 'ERROR';
 export interface CreatePendingTransactionProps {
   id: string;
   productId: string;
+  quantity: number;
   customerId: string;
   deliveryId: string;
   productAmountInCents: number;
@@ -13,6 +14,7 @@ export interface CreatePendingTransactionProps {
 export interface TransactionProps {
   id: string;
   productId: string;
+  quantity: number;
   customerId: string;
   deliveryId: string;
   productAmountInCents: number;
@@ -29,6 +31,7 @@ export interface TransactionProps {
 export class Transaction {
   public readonly id: string;
   public readonly productId: string;
+  public readonly quantity: number;
   public readonly customerId: string;
   public readonly deliveryId: string;
   public readonly productAmountInCents: number;
@@ -44,6 +47,7 @@ export class Transaction {
   private constructor(props: TransactionProps) {
     this.id = props.id;
     this.productId = props.productId;
+    this.quantity = props.quantity;
     this.customerId = props.customerId;
     this.deliveryId = props.deliveryId;
     this.productAmountInCents = props.productAmountInCents;
@@ -65,6 +69,7 @@ export class Transaction {
     return new Transaction({
       id: props.id,
       productId: props.productId,
+      quantity: props.quantity,
       customerId: props.customerId,
       deliveryId: props.deliveryId,
       productAmountInCents: props.productAmountInCents,
