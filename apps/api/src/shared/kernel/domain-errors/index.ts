@@ -54,3 +54,10 @@ export class InvalidDeliveryDataError extends DomainError {
   }
 }
 
+export class InvalidTransactionDataError extends DomainError {
+  constructor(message = 'Invalid transaction data provided') {
+    super('INVALID_TRANSACTION_DATA', message);
+  }
+}
+
+

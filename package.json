@@ -1,5 +1,5 @@
 {
-  "name": "nombre-repo",
+  "name": "product-checkout-platform",
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
