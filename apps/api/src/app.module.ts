@@ -6,6 +6,7 @@ import { DatabaseModule } from './shared/infrastructure/database/pg-pool.provide
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { DeliveriesModule } from './modules/deliveries/deliveries.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DeliveriesModule } from './modules/deliveries/deliveries.module';
     CatalogModule,
     CustomersModule,
     DeliveriesModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

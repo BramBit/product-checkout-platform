@@ -47,9 +47,9 @@ async function seed() {
     for (const product of products) {
       await pool.query(
         `INSERT INTO products (name, description, price_in_cents, stock_quantity, image_url)
-         SELECT $1, $2, $3, $4, $5
+         SELECT $1::varchar(200), $2, $3, $4, $5
          WHERE NOT EXISTS (
-           SELECT 1 FROM products WHERE name = $1
+           SELECT 1 FROM products WHERE name = $1::varchar(200)
          )`,
         [
           product.name,
