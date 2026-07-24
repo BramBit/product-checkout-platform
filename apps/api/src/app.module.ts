@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './shared/infrastructure/database/pg-pool.provider';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { CustomersModule } from './modules/customers/customers.module';
+import { DeliveriesModule } from './modules/deliveries/deliveries.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CustomersModule } from './modules/customers/customers.module';
     DatabaseModule,
     CatalogModule,
     CustomersModule,
+    DeliveriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

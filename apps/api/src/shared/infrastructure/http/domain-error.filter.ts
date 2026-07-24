@@ -9,6 +9,7 @@ import {
   InsufficientStockError,
   InvalidCardDataError,
   InvalidCustomerDataError,
+  InvalidDeliveryDataError,
   PaymentGatewayError,
 } from '../../kernel/domain-errors';
 
@@ -30,7 +31,8 @@ export class DomainErrorFilter implements ExceptionFilter {
     } else if (
       exception instanceof InsufficientStockError ||
       exception instanceof InvalidCardDataError ||
-      exception instanceof InvalidCustomerDataError
+      exception instanceof InvalidCustomerDataError ||
+      exception instanceof InvalidDeliveryDataError
     ) {
       status = HttpStatus.BAD_REQUEST;
     } else if (exception instanceof PaymentGatewayError) {

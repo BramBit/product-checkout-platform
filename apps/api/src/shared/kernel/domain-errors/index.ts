@@ -47,3 +47,10 @@ export class InvalidCustomerDataError extends DomainError {
     super('INVALID_CUSTOMER_DATA', message);
   }
 }
+
+export class InvalidDeliveryDataError extends DomainError {
+  constructor(message = 'Invalid delivery data provided') {
+    super('INVALID_DELIVERY_DATA', message);
+  }
+}
+
