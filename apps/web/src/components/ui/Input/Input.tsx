@@ -5,6 +5,7 @@ interface InputProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: () => void;
   error?: string;
   type?: string;
   placeholder?: string;
@@ -15,6 +16,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   value,
   onChange,
+  onBlur,
   error,
   type = 'text',
   placeholder,
@@ -25,14 +27,20 @@ export const Input: React.FC<InputProps> = ({
     error ? styles.inputError : '',
   ].filter(Boolean).join(' ');
 
+  const inputId = `input-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+
   return (
     <div className={styles.container}>
-      <label className={styles.label}>{label}</label>
+      <label htmlFor={inputId} className={styles.label}>
+        {label}
+      </label>
       <input
+        id={inputId}
         type={type}
         className={inputClasses}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
         placeholder={placeholder}
         maxLength={maxLength}
       />

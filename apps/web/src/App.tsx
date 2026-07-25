@@ -1,17 +1,16 @@
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './app/store';
-import { useAppSelector } from './app/hooks';
 import { ProductPage } from './features/product/ProductPage';
+import { CheckoutFormModal } from './features/checkout/CheckoutFormModal';
 
 function AppContent() {
-  const step = useAppSelector((state) => state.checkout.step);
-
-  if (step === 'PRODUCT') {
-    return <ProductPage />;
-  }
-
-  return <div>App con estado persistido listo</div>;
+  return (
+    <>
+      <ProductPage />
+      <CheckoutFormModal />
+    </>
+  );
 }
 
 function App() {

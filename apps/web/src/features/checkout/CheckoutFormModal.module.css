@@ -1,0 +1,75 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cardInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.brandBadge {
+  position: absolute;
+  right: 12px;
+  top: 36px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.visa {
+  background-color: #1a1f71;
+  color: #ffffff;
+}
+
+.mastercard {
+  background-color: #eb001b;
+  color: #ffffff;
+}
+
+.unknown {
+  background-color: #94a3b8;
+  color: #ffffff;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row > * {
+  flex: 1;
+}
+
+.errorBanner {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 12px;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.actions {
+  margin-top: 8px;
+}
