@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { getProducts } from '../../services/api';
 
 export interface Product {
   id: string;
@@ -26,7 +27,7 @@ const initialState: ProductState = {
 export const fetchProducts = createAsyncThunk<Product[]>(
   'products/fetchProducts',
   async () => {
-    return [];
+    return await getProducts();
   }
 );
 
