@@ -5,3 +5,6 @@ dist
 coverage
 *.log
 .pnpm-store
+apps/api/migrations/*.js
+apps/api/migrations/*.js.map
+apps/api/migrations/*.d.ts
