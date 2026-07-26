@@ -76,7 +76,12 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!main.ts",
+      "!**/*.module.ts",
+      "!shared/infrastructure/database/seed.ts",
+      "!shared/infrastructure/database/pg-pool.provider.ts",
+      "!**/*.dto.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
