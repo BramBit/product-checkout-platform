@@ -34,6 +34,8 @@ describe('cardValidation', () => {
     it('detects MASTERCARD for numbers in range 2221-2720', () => {
       expect(detectCardBrand('2221000000000000')).toBe('MASTERCARD');
       expect(detectCardBrand('2720000000000000')).toBe('MASTERCARD');
+      expect(detectCardBrand('2220000000000000')).toBe('UNKNOWN');
+      expect(detectCardBrand('2721000000000000')).toBe('UNKNOWN');
     });
 
     it('returns UNKNOWN for unrecognized brands', () => {

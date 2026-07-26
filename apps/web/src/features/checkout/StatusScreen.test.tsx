@@ -162,7 +162,7 @@ describe('StatusScreen', () => {
     expect(api.getTransactionStatus).toHaveBeenCalledTimes(1);
   });
 
-  it('dispatches resetCheckout and fetchProducts when clicking "Volver a la tienda"', () => {
+  it('dispatches resetCheckout and fetchProducts when clicking "Volver a la tienda"', async () => {
     const store = createTestStore();
     store.dispatch(setTransactionStatus('APPROVED'));
 
@@ -173,12 +173,55 @@ describe('StatusScreen', () => {
     );
 
     const returnBtn = screen.getByRole('button', { name: /volver a la tienda/i });
-    act(() => {
+    await act(async () => {
       fireEvent.click(returnBtn);
     });
 
     const state = store.getState().checkout;
     expect(state.step).toBe('PRODUCT');
     expect(state.transactionId).toBeNull();
+  });
+
+  it('stops polling after max attempts (15 PENDING responses) and shows fallback message', async () => {
+    vi.spyOn(api, 'getTransactionStatus').mockResolvedValue({
+      id: 'tx-999',
+      productId: 'prod-1',
+      customerId: 'cust-1',
+      deliveryId: 'del-1',
+      quantity: 1,
+      productAmountInCents: 10000000,
+      baseFeeInCents: 500000,
+      deliveryFeeInCents: 800000,
+      totalAmountInCents: 11300000,
+      status: 'PENDING',
+      wompiTransactionId: null,
+      wompiStatusDetail: null,
+      createdAt: '2026-07-25T00:00:00Z',
+      updatedAt: '2026-07-25T00:00:00Z',
+    });
+
+    const store = createTestStore();
+
+    render(
+      <Provider store={store}>
+        <StatusScreen />
+      </Provider>
+    );
+
+    // Advance timers for 15 intervals (15 * 1500ms = 22500ms)
+    for (let i = 0; i < 15; i++) {
+      await act(async () => {
+        vi.advanceTimersByTime(1500);
+      });
+    }
+
+    expect(api.getTransactionStatus).toHaveBeenCalledTimes(15);
+    expect(screen.getByText(/verifica más tarde/i)).toBeInTheDocument();
+
+    // Verify polling stopped by advancing timers further
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(api.getTransactionStatus).toHaveBeenCalledTimes(15);
   });
 });

@@ -199,4 +199,44 @@ describe('CheckoutFormModal', () => {
     const state = store.getState().checkout;
     expect(state.step).toBe('CHECKOUT_FORM');
   });
+
+  it('shows error message when expiry date is invalid (past month of current year)', () => {
+    const store = createTestStore();
+    store.dispatch(setStep('CHECKOUT_FORM'));
+
+    render(
+      <Provider store={store}>
+        <CheckoutFormModal />
+      </Provider>
+    );
+
+    const monthInput = screen.getByLabelText(/mes exp/i);
+    const yearInput = screen.getByLabelText(/año exp/i);
+
+    // Current year in YY format
+    const currentYearYY = new Date().getFullYear().toString().slice(-2);
+
+    fireEvent.change(monthInput, { target: { value: '01' } });
+    fireEvent.change(yearInput, { target: { value: currentYearYY } });
+    fireEvent.blur(yearInput);
+
+    expect(screen.getAllByText('Fecha inválida')).toHaveLength(2);
+  });
+
+  it('renders card input state without brand badge when card brand is UNKNOWN', () => {
+    const store = createTestStore();
+    store.dispatch(setStep('CHECKOUT_FORM'));
+
+    render(
+      <Provider store={store}>
+        <CheckoutFormModal />
+      </Provider>
+    );
+
+    const cardInput = screen.getByLabelText(/número de tarjeta/i);
+    fireEvent.change(cardInput, { target: { value: '370000000000000' } });
+
+    expect(screen.queryByText('VISA')).not.toBeInTheDocument();
+    expect(screen.queryByText('MASTERCARD')).not.toBeInTheDocument();
+  });
 });

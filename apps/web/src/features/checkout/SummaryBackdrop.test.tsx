@@ -174,4 +174,27 @@ describe('SummaryBackdrop', () => {
     const state = store.getState().checkout;
     expect(state.step).toBe('SUMMARY');
   });
+
+  it('displays error and does NOT call createTransaction when createCustomer succeeds but createDelivery fails', async () => {
+    vi.spyOn(api, 'createCustomer').mockResolvedValue({ id: 'cust-100' });
+    vi.spyOn(api, 'createDelivery').mockRejectedValue(new Error('Error al crear dirección de entrega'));
+    const createTxSpy = vi.spyOn(api, 'createTransaction');
+
+    const store = createTestStore();
+
+    render(
+      <Provider store={store}>
+        <SummaryBackdrop />
+      </Provider>
+    );
+
+    const confirmBtn = screen.getByRole('button', { name: /confirmar pago/i });
+    fireEvent.click(confirmBtn);
+
+    expect(await screen.findByText('Error al crear dirección de entrega')).toBeInTheDocument();
+    expect(createTxSpy).not.toHaveBeenCalled();
+
+    const state = store.getState().checkout;
+    expect(state.step).toBe('SUMMARY');
+  });
 });

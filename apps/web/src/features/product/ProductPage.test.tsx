@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { ProductPage } from './ProductPage';
@@ -102,5 +102,67 @@ describe('ProductPage', () => {
     const state = store.getState();
     expect(state.products.selectedProductId).toBe('prod-123');
     expect(state.checkout.step).toBe('CHECKOUT_FORM');
+  });
+
+  it('dispatches fetchProducts when clicking "Reintentar" after status failed', async () => {
+    vi.spyOn(api, 'getProducts').mockRejectedValue(new Error('Fetch failed'));
+
+    const store = createTestStore();
+    render(
+      <Provider store={store}>
+        <ProductPage />
+      </Provider>
+    );
+
+    const retryBtn = await screen.findByRole('button', { name: /reintentar/i });
+    expect(api.getProducts).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      fireEvent.click(retryBtn);
+    });
+    expect(api.getProducts).toHaveBeenCalledTimes(2);
+  });
+
+  it('shows message "No hay productos disponibles" when items is empty after succeeded', async () => {
+    vi.spyOn(api, 'getProducts').mockResolvedValue([]);
+
+    const store = createTestStore();
+    render(
+      <Provider store={store}>
+        <ProductPage />
+      </Provider>
+    );
+
+    expect(await screen.findByText('No hay productos disponibles.')).toBeInTheDocument();
+  });
+
+  it('handles quantity selector boundaries (+ disabled at stockQuantity, - disabled at 1)', async () => {
+    vi.spyOn(api, 'getProducts').mockResolvedValue([
+      {
+        ...mockProducts[0],
+        stockQuantity: 2,
+      },
+    ]);
+
+    const store = createTestStore();
+    render(
+      <Provider store={store}>
+        <ProductPage />
+      </Provider>
+    );
+
+    await screen.findByText('Silla Gamer Ergológica');
+
+    const decreaseBtn = screen.getByRole('button', { name: 'Disminuir cantidad' });
+    const increaseBtn = screen.getByRole('button', { name: 'Aumentar cantidad' });
+
+    // Initial quantity is 1 (default state)
+    expect(decreaseBtn).toBeDisabled();
+    expect(increaseBtn).not.toBeDisabled();
+
+    fireEvent.click(increaseBtn);
+    expect(store.getState().checkout.quantity).toBe(2);
+    expect(increaseBtn).toBeDisabled();
+    expect(decreaseBtn).not.toBeDisabled();
   });
 });
