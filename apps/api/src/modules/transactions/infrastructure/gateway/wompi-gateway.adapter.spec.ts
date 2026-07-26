@@ -180,6 +180,88 @@ describe('WompiGatewayAdapter', () => {
         expect(err).toBeInstanceOf(PaymentGatewayError);
       }
     });
+
+    it('should throw PaymentGatewayError when response data is empty (line 89)', async () => {
+      const params = {
+        amountInCents: 500000,
+        currency: 'COP',
+        customerEmail: 'customer@example.com',
+        cardToken: 'tok_test_card',
+        installments: 1,
+        reference: 'REF-12345',
+        acceptanceToken: 'fake-acceptance-token',
+      };
+
+      const mockResponse: AxiosResponse = {
+        data: {},
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: new AxiosHeaders() },
+      };
+
+      httpService.post.mockReturnValue(of(mockResponse));
+
+      try {
+        await adapter.createTransaction(params);
+        fail('Should have thrown PaymentGatewayError');
+      } catch (err: any) {
+        expect(err).toBeInstanceOf(PaymentGatewayError);
+        expect(err.message).toBe('Invalid response received from Wompi create transaction');
+      }
+    });
+
+    it('should set statusDetail to null when status_message is missing', async () => {
+      const params = {
+        amountInCents: 500000,
+        currency: 'COP',
+        customerEmail: 'customer@example.com',
+        cardToken: 'tok_test_card',
+        installments: 1,
+        reference: 'REF-12345',
+        acceptanceToken: 'fake-acceptance-token',
+      };
+
+      const mockResponse: AxiosResponse = {
+        data: {
+          data: {
+            id: 'wompi-tx-999',
+            status: 'APPROVED',
+          },
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: new AxiosHeaders() },
+      };
+
+      httpService.post.mockReturnValue(of(mockResponse));
+
+      const result = await adapter.createTransaction(params);
+      expect(result.statusDetail).toBeNull();
+    });
+
+    it('should use generic error message when error has no response data or message (line 99/105)', async () => {
+      const params = {
+        amountInCents: 500000,
+        currency: 'COP',
+        customerEmail: 'customer@example.com',
+        cardToken: 'tok_test_card',
+        installments: 1,
+        reference: 'REF-12345',
+        acceptanceToken: 'fake-acceptance-token',
+      };
+
+      httpService.post.mockReturnValue(throwError(() => ({})));
+
+      try {
+        await adapter.createTransaction(params);
+        fail('Should have thrown PaymentGatewayError');
+      } catch (err: any) {
+        expect(err).toBeInstanceOf(PaymentGatewayError);
+        expect(err.message).toBe('Error creating transaction with Wompi');
+      }
+    });
   });
 
   describe('getTransactionStatus', () => {
@@ -216,6 +298,45 @@ describe('WompiGatewayAdapter', () => {
       );
     });
 
+    it('should throw PaymentGatewayError when response data is empty (line 125)', async () => {
+      const mockResponse: AxiosResponse = {
+        data: {},
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: new AxiosHeaders() },
+      };
+
+      httpService.get.mockReturnValue(of(mockResponse));
+
+      try {
+        await adapter.getTransactionStatus('wompi-tx-999');
+        fail('Should have thrown PaymentGatewayError');
+      } catch (err: any) {
+        expect(err).toBeInstanceOf(PaymentGatewayError);
+        expect(err.message).toBe('Invalid response received from Wompi get transaction status');
+      }
+    });
+
+    it('should set statusDetail to null when status_message is missing', async () => {
+      const mockResponse: AxiosResponse = {
+        data: {
+          data: {
+            status: 'APPROVED',
+          },
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: new AxiosHeaders() },
+      };
+
+      httpService.get.mockReturnValue(of(mockResponse));
+
+      const result = await adapter.getTransactionStatus('wompi-tx-999');
+      expect(result.statusDetail).toBeNull();
+    });
+
     it('should throw PaymentGatewayError when HttpService throws error', async () => {
       const axiosError = new Error('Network error');
 
@@ -226,6 +347,18 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
+      }
+    });
+
+    it('should use generic error message when error has no response data or message (line 134/140)', async () => {
+      httpService.get.mockReturnValue(throwError(() => ({})));
+
+      try {
+        await adapter.getTransactionStatus('wompi-tx-999');
+        fail('Should have thrown PaymentGatewayError');
+      } catch (err: any) {
+        expect(err).toBeInstanceOf(PaymentGatewayError);
+        expect(err.message).toBe('Error retrieving transaction status from Wompi');
       }
     });
   });

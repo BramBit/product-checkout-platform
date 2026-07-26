@@ -10,6 +10,7 @@ import {
   InsufficientStockError,
   InvalidTransactionDataError,
   PaymentGatewayError,
+  InvalidCardDataError,
 } from '../../../../shared/kernel/domain-errors';
 
 describe('CreateTransactionUseCase', () => {
@@ -169,5 +170,14 @@ describe('CreateTransactionUseCase', () => {
         wompiStatusDetail: 'Gateway error',
       }),
     );
+  });
+
+  it('should instantiate InvalidCardDataError properly', () => {
+    const errorDefault = new InvalidCardDataError();
+    const errorCustom = new InvalidCardDataError('Custom message');
+
+    expect(errorDefault.code).toBe('INVALID_CARD_DATA');
+    expect(errorDefault.message).toBe('Invalid card data provided');
+    expect(errorCustom.message).toBe('Custom message');
   });
 });

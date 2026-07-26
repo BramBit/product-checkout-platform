@@ -1,7 +1,13 @@
 import { GetProductByIdUseCase } from './get-product-by-id.use-case';
 import { Product } from '../../domain/entities/product.entity';
 import type { ProductRepositoryPort } from '../../domain/ports/product-repository.port';
-import { ProductNotFoundError } from '../../../../shared/kernel/domain-errors';
+import {
+  ProductNotFoundError,
+  InvalidCustomerDataError,
+  InvalidDeliveryDataError,
+  InvalidTransactionDataError,
+  InvalidCardDataError,
+} from '../../../../shared/kernel/domain-errors';
 
 describe('GetProductByIdUseCase', () => {
   let useCase: GetProductByIdUseCase;
@@ -48,5 +54,17 @@ describe('GetProductByIdUseCase', () => {
     expect(result.getError()).toBeInstanceOf(ProductNotFoundError);
     expect(result.getError().code).toBe('PRODUCT_NOT_FOUND');
     expect(mockRepository.findById).toHaveBeenCalledWith(nonExistentId);
+  });
+
+  it('should instantiate unused domain error classes', () => {
+    const invalidCustomerErr = new InvalidCustomerDataError();
+    const invalidDeliveryErr = new InvalidDeliveryDataError();
+    const invalidTxErr = new InvalidTransactionDataError();
+    const invalidCardErr = new InvalidCardDataError();
+
+    expect(invalidCustomerErr.code).toBe('INVALID_CUSTOMER_DATA');
+    expect(invalidDeliveryErr.code).toBe('INVALID_DELIVERY_DATA');
+    expect(invalidTxErr.code).toBe('INVALID_TRANSACTION_DATA');
+    expect(invalidCardErr.code).toBe('INVALID_CARD_DATA');
   });
 });

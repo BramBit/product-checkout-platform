@@ -1,7 +1,7 @@
-import { CreateOrFindCustomerUseCase } from './create-or-find-customer.use-case';
+import { CreateOrFindCustomerUseCase, GetCustomerByIdUseCase } from './create-or-find-customer.use-case';
 import { Customer } from '../../domain/entities/customer.entity';
 import type { CustomerRepositoryPort } from '../../domain/ports/customer-repository.port';
-import { InvalidCustomerDataError } from '../../../../shared/kernel/domain-errors';
+import { InvalidCustomerDataError, CustomerNotFoundError } from '../../../../shared/kernel/domain-errors';
 
 describe('CreateOrFindCustomerUseCase', () => {
   let useCase: CreateOrFindCustomerUseCase;
@@ -79,5 +79,45 @@ describe('CreateOrFindCustomerUseCase', () => {
     expect(result.getError().message).toBe('Document ID cannot be empty');
     expect(mockRepository.findByEmail).not.toHaveBeenCalled();
     expect(mockRepository.create).not.toHaveBeenCalled();
+  });
+});
+
+describe('GetCustomerByIdUseCase', () => {
+  let useCase: GetCustomerByIdUseCase;
+  let mockRepository: jest.Mocked<CustomerRepositoryPort>;
+
+  beforeEach(() => {
+    mockRepository = {
+      findByEmail: jest.fn(),
+      create: jest.fn(),
+      findById: jest.fn(),
+    };
+
+    useCase = new GetCustomerByIdUseCase(mockRepository);
+  });
+
+  it('should return customer when found', async () => {
+    const customer = Customer.create({
+      id: 'cust-123',
+      fullName: 'Jane Doe',
+      email: 'jane@example.com',
+      phone: '1234567890',
+      documentId: '123456',
+    });
+    mockRepository.findById.mockResolvedValue(customer);
+
+    const result = await useCase.execute('cust-123');
+
+    expect(result.isSuccess).toBe(true);
+    expect(result.getValue()).toBe(customer);
+  });
+
+  it('should fail with CustomerNotFoundError when customer is not found', async () => {
+    mockRepository.findById.mockResolvedValue(null);
+
+    const result = await useCase.execute('cust-123');
+
+    expect(result.isFailure).toBe(true);
+    expect(result.getError()).toBeInstanceOf(CustomerNotFoundError);
   });
 });

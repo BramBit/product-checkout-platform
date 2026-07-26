@@ -1,9 +1,9 @@
-import { CreateDeliveryUseCase } from './create-delivery.use-case';
+import { CreateDeliveryUseCase, GetDeliveryByIdUseCase } from './create-delivery.use-case';
 import { Delivery } from '../../domain/entities/delivery.entity';
 import { Customer } from '../../../customers/domain/entities/customer.entity';
 import type { DeliveryRepositoryPort } from '../../domain/ports/delivery-repository.port';
 import type { CustomerRepositoryPort } from '../../../customers/domain/ports/customer-repository.port';
-import { InvalidDeliveryDataError, CustomerNotFoundError } from '../../../../shared/kernel/domain-errors';
+import { InvalidDeliveryDataError, CustomerNotFoundError, DeliveryNotFoundError } from '../../../../shared/kernel/domain-errors';
 
 describe('CreateDeliveryUseCase', () => {
   let useCase: CreateDeliveryUseCase;
@@ -111,5 +111,44 @@ describe('CreateDeliveryUseCase', () => {
     expect(result.isFailure).toBe(true);
     expect(result.getError()).toBeInstanceOf(InvalidDeliveryDataError);
     expect(result.getError().message).toBe('Region cannot be empty');
+  });
+});
+
+describe('GetDeliveryByIdUseCase', () => {
+  let useCase: GetDeliveryByIdUseCase;
+  let mockDeliveryRepository: jest.Mocked<DeliveryRepositoryPort>;
+
+  beforeEach(() => {
+    mockDeliveryRepository = {
+      create: jest.fn(),
+      findById: jest.fn(),
+    };
+
+    useCase = new GetDeliveryByIdUseCase(mockDeliveryRepository);
+  });
+
+  it('should return delivery when found', async () => {
+    const delivery = Delivery.create({
+      id: 'del-123',
+      customerId: 'cust-123',
+      address: 'Calle 123',
+      city: 'Bogotá',
+      region: 'Cundinamarca',
+    });
+    mockDeliveryRepository.findById.mockResolvedValue(delivery);
+
+    const result = await useCase.execute('del-123');
+
+    expect(result.isSuccess).toBe(true);
+    expect(result.getValue()).toBe(delivery);
+  });
+
+  it('should fail with DeliveryNotFoundError when delivery is not found', async () => {
+    mockDeliveryRepository.findById.mockResolvedValue(null);
+
+    const result = await useCase.execute('del-123');
+
+    expect(result.isFailure).toBe(true);
+    expect(result.getError()).toBeInstanceOf(DeliveryNotFoundError);
   });
 });

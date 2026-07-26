@@ -44,6 +44,19 @@ describe('PostgresProductRepository', () => {
       expect(products[0].id).toBe('prod-1');
       expect(products[0].name).toBe('Product 1');
     });
+
+    it('should map undefined image_url when image_url column is null', async () => {
+      pool.query.mockResolvedValue({
+        rows: [{ ...mockProductRow, image_url: null }],
+        command: 'SELECT',
+        rowCount: 1,
+        oid: 0,
+        fields: [],
+      });
+
+      const products = await repository.findAll();
+      expect(products[0].imageUrl).toBeUndefined();
+    });
   });
 
   describe('findById', () => {
