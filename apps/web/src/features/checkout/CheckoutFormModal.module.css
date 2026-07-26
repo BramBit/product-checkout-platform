@@ -70,6 +70,12 @@
   flex: 1;
 }
 
+@media (max-width: 400px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
 .errorBanner {
   background-color: #fef2f2;
   border: 1px solid #fca5a5;
