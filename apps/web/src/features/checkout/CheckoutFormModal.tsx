@@ -142,7 +142,8 @@ export const CheckoutFormModal: React.FC = () => {
 
         {/* SECCIÓN 1: Datos de Tarjeta */}
         <div className={styles.section}>
-          <h4 className={styles.sectionTitle}>1. Información de la Tarjeta</h4>
+          <span className={styles.eyebrow}>PASO 1</span>
+          <h4 className={styles.sectionTitle}>Información de la Tarjeta</h4>
 
           <div className={styles.cardInputWrapper}>
             <Input
@@ -215,7 +216,8 @@ export const CheckoutFormModal: React.FC = () => {
 
         {/* SECCIÓN 2: Datos de Entrega */}
         <div className={styles.section}>
-          <h4 className={styles.sectionTitle}>2. Información de Entrega</h4>
+          <span className={styles.eyebrow}>PASO 2</span>
+          <h4 className={styles.sectionTitle}>Información de Entrega</h4>
 
           <Input
             label="Nombre Completo"

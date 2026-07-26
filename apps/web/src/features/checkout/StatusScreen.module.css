@@ -1,0 +1,149 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.statusCard {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.centerBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconSuccess {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--color-success);
+  background-color: rgba(62, 207, 142, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkMark {
+  width: 16px;
+  height: 28px;
+  border: solid var(--color-success);
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg) translate(-2px, -2px);
+  display: block;
+}
+
+.iconError {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--color-danger);
+  background-color: rgba(255, 92, 92, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.xMark {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  display: block;
+}
+
+.xMark::before,
+.xMark::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 28px;
+  height: 4px;
+  background-color: var(--color-danger);
+  border-radius: 2px;
+}
+
+.xMark::before {
+  transform: rotate(45deg);
+}
+
+.xMark::after {
+  transform: rotate(-45deg);
+}
+
+.titleSuccess {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-success);
+  margin: 0;
+}
+
+.titleError {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-danger);
+  margin: 0;
+}
+
+.titlePending {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.details {
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.detailRow strong {
+  color: var(--color-text-primary);
+}
+
+.wompiDetail {
+  font-size: 0.875rem;
+  color: var(--color-danger);
+  background-color: rgba(255, 92, 92, 0.1);
+  border: 1px solid var(--color-danger);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actions {
+  width: 100%;
+  margin-top: 8px;
+}

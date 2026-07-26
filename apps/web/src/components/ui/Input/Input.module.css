@@ -6,19 +6,22 @@
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: 13px;
   font-weight: 500;
-  color: #334155;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
 }
 
 .input {
   min-height: 44px;
   padding: 10px 14px;
   font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #cbd5e1;
-  background-color: #ffffff;
-  color: #0f172a;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
@@ -26,26 +29,27 @@
 }
 
 .input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(78, 140, 255, 0.15);
 }
 
 .inputError {
-  border-color: #ef4444;
+  border-color: var(--color-danger);
 }
 
 .inputError:focus {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(255, 92, 92, 0.15);
 }
 
 .errorMessage {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8125rem;
-  color: #dc2626;
+  font-size: 13px;
+  color: var(--color-danger);
   font-weight: 500;
+  margin-top: 4px;
 }
 
 .errorIcon {
@@ -55,7 +59,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background-color: #dc2626;
+  background-color: var(--color-danger);
   color: #ffffff;
   font-size: 10px;
   font-weight: bold;

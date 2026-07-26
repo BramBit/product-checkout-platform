@@ -110,7 +110,11 @@ export const ProductPage: React.FC = () => {
 
             <div
               className={`${styles.stock} ${
-                isOutOfStock ? styles.outOfStock : ''
+                isOutOfStock
+                  ? styles.outOfStock
+                  : product.stockQuantity <= 5
+                  ? styles.lowStock
+                  : styles.inStock
               }`}
             >
               {isOutOfStock
