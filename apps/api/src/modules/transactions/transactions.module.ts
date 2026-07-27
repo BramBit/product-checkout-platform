@@ -4,7 +4,7 @@ import { CatalogModule } from '../catalog/catalog.module';
 import { TRANSACTION_REPOSITORY_PORT } from './domain/ports/transaction-repository.port';
 import { PAYMENT_GATEWAY_PORT } from './domain/ports/payment-gateway.port';
 import { PostgresTransactionRepository } from './infrastructure/persistence/postgres-transaction.repository';
-import { WompiGatewayAdapter } from './infrastructure/gateway/wompi-gateway.adapter';
+import { PaymentGatewayAdapter } from './infrastructure/gateway/payment-gateway.adapter';
 import { CreateTransactionUseCase } from './application/use-cases/create-transaction.use-case';
 import { CheckTransactionStatusUseCase } from './application/use-cases/check-transaction-status.use-case';
 import { TransactionsController } from './infrastructure/http/transactions.controller';
@@ -22,7 +22,7 @@ import { TransactionsController } from './infrastructure/http/transactions.contr
     },
     {
       provide: PAYMENT_GATEWAY_PORT,
-      useClass: WompiGatewayAdapter,
+      useClass: PaymentGatewayAdapter,
     },
     CreateTransactionUseCase,
     CheckTransactionStatusUseCase,

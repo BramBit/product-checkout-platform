@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { tokenizeCard } from './wompiService';
+import { tokenizeCard } from './paymentGatewayService';
 import axios from 'axios';
 
 vi.mock('axios');
 
-describe('wompiService', () => {
+describe('paymentGatewayService', () => {
   it('returns token id on success', async () => {
     vi.spyOn(axios, 'post').mockResolvedValue({ data: { data: { id: 'tok_123' } } });
     const token = await tokenizeCard({

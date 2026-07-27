@@ -1,20 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { of, throwError } from 'rxjs';
-import { WompiGatewayAdapter } from './wompi-gateway.adapter';
+import { PaymentGatewayAdapter } from './payment-gateway.adapter';
 import { PaymentGatewayError } from '../../../../shared/kernel/domain-errors';
 import { AxiosResponse, AxiosHeaders } from 'axios';
 
-describe('WompiGatewayAdapter', () => {
-  let adapter: WompiGatewayAdapter;
+describe('PaymentGatewayAdapter', () => {
+  let adapter: PaymentGatewayAdapter;
   let httpService: jest.Mocked<HttpService>;
   let configService: jest.Mocked<ConfigService>;
 
   const fakeConfig = {
-    WOMPI_PRIVATE_KEY: 'prv_test_key',
-    WOMPI_PUBLIC_KEY: 'pub_test_key',
-    WOMPI_INTEGRITY_KEY: 'integrity_test_key',
-    WOMPI_API_URL: 'https://api-sandbox.co.uat.wompi.dev/v1',
+    PAYMENT_GATEWAY_PRIVATE_KEY: 'prv_test_key',
+    PAYMENT_GATEWAY_PUBLIC_KEY: 'pub_test_key',
+    PAYMENT_GATEWAY_INTEGRITY_KEY: 'integrity_test_key',
+    PAYMENT_GATEWAY_API_URL: 'https://api-sandbox.co.uat.wompi.dev/v1',
   };
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('WompiGatewayAdapter', () => {
       }),
     } as unknown as jest.Mocked<ConfigService>;
 
-    adapter = new WompiGatewayAdapter(httpService, configService);
+    adapter = new PaymentGatewayAdapter(httpService, configService);
   });
 
   describe('getAcceptanceToken', () => {
@@ -95,7 +95,7 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
-        expect(err.message).toBe('Failed to obtain acceptance token from Wompi response');
+        expect(err.message).toBe('Failed to obtain acceptance token from payment gateway response');
       }
     });
   });
@@ -207,7 +207,7 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
-        expect(err.message).toBe('Invalid response received from Wompi create transaction');
+        expect(err.message).toBe('Invalid response received from payment gateway create transaction');
       }
     });
 
@@ -259,7 +259,7 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
-        expect(err.message).toBe('Error creating transaction with Wompi');
+        expect(err.message).toBe('Error creating transaction with payment gateway');
       }
     });
   });
@@ -314,7 +314,7 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
-        expect(err.message).toBe('Invalid response received from Wompi get transaction status');
+        expect(err.message).toBe('Invalid response received from payment gateway get transaction status');
       }
     });
 
@@ -358,7 +358,7 @@ describe('WompiGatewayAdapter', () => {
         fail('Should have thrown PaymentGatewayError');
       } catch (err: any) {
         expect(err).toBeInstanceOf(PaymentGatewayError);
-        expect(err.message).toBe('Error retrieving transaction status from Wompi');
+        expect(err.message).toBe('Error retrieving transaction status from payment gateway');
       }
     });
   });

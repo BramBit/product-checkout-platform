@@ -11,7 +11,7 @@ export interface TokenizeCardDTO {
 export const tokenizeCard = async (cardData: TokenizeCardDTO): Promise<string> => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_WOMPI_SANDBOX_URL}/tokens/cards`,
+      `${import.meta.env.VITE_PAYMENT_GATEWAY_SANDBOX_URL}/tokens/cards`,
       {
         number: cardData.number.replace(/\s/g, ''),
         exp_month: cardData.expMonth,
@@ -21,7 +21,7 @@ export const tokenizeCard = async (cardData: TokenizeCardDTO): Promise<string> =
       },
       {
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_WOMPI_PUBLIC_KEY}`,
+          Authorization: `Bearer ${import.meta.env.VITE_PAYMENT_GATEWAY_PUBLIC_KEY}`,
           'Content-Type': 'application/json',
         },
       }

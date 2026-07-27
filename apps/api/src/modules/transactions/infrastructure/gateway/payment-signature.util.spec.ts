@@ -1,4 +1,4 @@
-import { generateIntegritySignature } from './wompi-signature.util';
+import { generateIntegritySignature } from './payment-signature.util';
 import { createHash } from 'crypto';
 
 describe('generateIntegritySignature', () => {

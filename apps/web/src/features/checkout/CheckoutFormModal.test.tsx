@@ -5,9 +5,9 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { CheckoutFormModal } from './CheckoutFormModal';
 import checkoutReducer, { setStep } from './checkoutSlice';
 import productReducer from '../product/productSlice';
-import * as wompiService from '../../services/wompiService';
+import * as paymentGatewayService from '../../services/paymentGatewayService';
 
-vi.mock('../../services/wompiService');
+vi.mock('../../services/paymentGatewayService');
 
 const createTestStore = () =>
   configureStore({
@@ -70,7 +70,7 @@ describe('CheckoutFormModal', () => {
   });
 
   it('calls tokenizeCard with correct data and dispatches setStep("SUMMARY") when form is valid', async () => {
-    vi.spyOn(wompiService, 'tokenizeCard').mockResolvedValue('token-123456');
+    vi.spyOn(paymentGatewayService, 'tokenizeCard').mockResolvedValue('token-123456');
 
     const store = createTestStore();
     store.dispatch(setStep('CHECKOUT_FORM'));
@@ -121,7 +121,7 @@ describe('CheckoutFormModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(wompiService.tokenizeCard).toHaveBeenCalledWith({
+      expect(paymentGatewayService.tokenizeCard).toHaveBeenCalledWith({
         number: '4242 4242 4242 4242',
         expMonth: '12',
         expYear: '30',
@@ -140,7 +140,7 @@ describe('CheckoutFormModal', () => {
   });
 
   it('displays error banner and stays on CHECKOUT_FORM if tokenizeCard fails', async () => {
-    vi.spyOn(wompiService, 'tokenizeCard').mockRejectedValue(
+    vi.spyOn(paymentGatewayService, 'tokenizeCard').mockRejectedValue(
       new Error('No pudimos validar tu tarjeta, verifica los datos e intenta de nuevo.')
     );
 

@@ -4,7 +4,7 @@ import { setStep, setCardData, setDeliveryForm } from './checkoutSlice';
 import { Modal } from '../../components/ui/Modal/Modal';
 import { Input } from '../../components/ui/Input/Input';
 import { Button } from '../../components/ui/Button/Button';
-import { tokenizeCard } from '../../services/wompiService';
+import { tokenizeCard } from '../../services/paymentGatewayService';
 import {
   luhnCheck,
   detectCardBrand,

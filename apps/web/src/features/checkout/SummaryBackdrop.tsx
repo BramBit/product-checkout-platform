@@ -148,7 +148,9 @@ export const SummaryBackdrop: React.FC = () => {
             {checkout.cardData.brand && (
               <span
                 className={`${styles.brandBadge} ${
-                  checkout.cardData.brand === 'MASTERCARD'
+                  checkout.cardData.brand === 'VISA'
+                    ? styles.visa
+                    : checkout.cardData.brand === 'MASTERCARD'
                     ? styles.mastercard
                     : ''
                 }`}

@@ -9,10 +9,10 @@ import {
   GetTransactionStatusGatewayResponse,
 } from '../../domain/ports/payment-gateway.port';
 import { PaymentGatewayError } from '../../../../shared/kernel/domain-errors';
-import { generateIntegritySignature } from './wompi-signature.util';
+import { generateIntegritySignature } from './payment-signature.util';
 
 @Injectable()
-export class WompiGatewayAdapter implements PaymentGatewayPort {
+export class PaymentGatewayAdapter implements PaymentGatewayPort {
   private readonly publicKey: string;
   private readonly privateKey: string;
   private readonly integrityKey: string;
@@ -22,10 +22,10 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {
-    this.publicKey = this.configService.get<string>('WOMPI_PUBLIC_KEY', '');
-    this.privateKey = this.configService.get<string>('WOMPI_PRIVATE_KEY', '');
-    this.integrityKey = this.configService.get<string>('WOMPI_INTEGRITY_KEY', '');
-    this.apiUrl = this.configService.get<string>('WOMPI_API_URL', 'https://api-sandbox.co.uat.wompi.dev/v1');
+    this.publicKey = this.configService.get<string>('PAYMENT_GATEWAY_PUBLIC_KEY', '');
+    this.privateKey = this.configService.get<string>('PAYMENT_GATEWAY_PRIVATE_KEY', '');
+    this.integrityKey = this.configService.get<string>('PAYMENT_GATEWAY_INTEGRITY_KEY', '');
+    this.apiUrl = this.configService.get<string>('PAYMENT_GATEWAY_API_URL', 'https://api-sandbox.co.uat.wompi.dev/v1');
   }
 
   async getAcceptanceToken(): Promise<string> {
@@ -34,7 +34,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
       const response = await firstValueFrom(this.httpService.get(url));
       const acceptanceToken = response.data?.data?.presigned_acceptance?.acceptance_token;
       if (!acceptanceToken) {
-        throw new PaymentGatewayError('Failed to obtain acceptance token from Wompi response');
+        throw new PaymentGatewayError('Failed to obtain acceptance token from payment gateway response');
       }
       return acceptanceToken;
     } catch (error: any) {
@@ -45,7 +45,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
         error.response?.data?.error?.reason ||
         error.response?.data?.message ||
         error.message ||
-        'Error retrieving acceptance token from Wompi';
+        'Error retrieving acceptance token from payment gateway';
       throw new PaymentGatewayError(errorMessage);
     }
   }
@@ -86,7 +86,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
 
       const txData = response.data?.data;
       if (!txData) {
-        throw new PaymentGatewayError('Invalid response received from Wompi create transaction');
+        throw new PaymentGatewayError('Invalid response received from payment gateway create transaction');
       }
 
       return {
@@ -102,7 +102,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
         error.response?.data?.error?.reason ||
         error.response?.data?.message ||
         error.message ||
-        'Error creating transaction with Wompi';
+        'Error creating transaction with payment gateway';
       throw new PaymentGatewayError(errorMessage);
     }
   }
@@ -122,7 +122,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
 
       const txData = response.data?.data;
       if (!txData) {
-        throw new PaymentGatewayError('Invalid response received from Wompi get transaction status');
+        throw new PaymentGatewayError('Invalid response received from payment gateway get transaction status');
       }
 
       return {
@@ -137,7 +137,7 @@ export class WompiGatewayAdapter implements PaymentGatewayPort {
         error.response?.data?.error?.reason ||
         error.response?.data?.message ||
         error.message ||
-        'Error retrieving transaction status from Wompi';
+        'Error retrieving transaction status from payment gateway';
       throw new PaymentGatewayError(errorMessage);
     }
   }
